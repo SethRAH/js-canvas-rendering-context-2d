@@ -1,0 +1,4 @@
+var searchIndex = JSON.parse('{\
+"lib":{"doc":"","t":[3,11,11,11,11,11,11,11,11,11],"n":["CanvasRenderingContext2D","arc","arc_to","borrow","borrow_mut","from","into","try_from","try_into","type_id"],"q":["lib","","","","","","","","",""],"d":["","adds a circular arc to the current sub-path.  see …","adds a circular arc to the current sub-path, using the …","","","","","","",""],"i":[0,1,1,1,1,1,1,1,1,1],"f":[null,[[["f32",15],["f32",15],["f32",15],["f32",15],["f32",15],["bool",15]]],[[["f32",15],["f32",15],["f32",15],["f32",15],["f32",15]]],[[]],[[]],[[]],[[]],[[],["result",4]],[[],["result",4]],[[],["typeid",3]]],"p":[[3,"CanvasRenderingContext2D"]]}\
+}');
+if (window.initSearch) {window.initSearch(searchIndex)};
