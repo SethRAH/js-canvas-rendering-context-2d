@@ -2,7 +2,7 @@
 name = "js-canvas-rendering-context-2d"
 version = "0.1.0"
 edition = "2021"
-description = "A library meant to be a zero dependency wrapper for the for use in WASM rust applications."
+description = "A library meant to be a zero dependency wrapper for the CanvasRenderingContext2D web api for use in WASM rust applications."
 license-file = "LICENSE"
 readme = "README.md"
 repository = "https://github.com/SethRAH/js-canvas-rendering-context-2d"
