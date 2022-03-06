@@ -2,9 +2,10 @@
     global.rust = global.rust || {};
     global.rust.wasm = global.rust.wasm || {};
 
-    function CanvasRenderingContext2D (context2D, wasmPath) {
+    function CanvasRenderingContext2D (context2D, wasmPath, initCallback) {
         this.context2D = context2D;
         this.wasmPath = wasmPath;
+        this.initCallback = initCallback || ((result) => {});
         this.init = function() {        
             let myContext = this.context2D;
             let imports = {
@@ -79,26 +80,24 @@
             };      
     
             WebAssembly.instantiateStreaming(fetch(this.wasmPath), imports)
-            .then( result => {
-                result.instance.exports.main();
-            });  
+            .then(this.initCallback);  
         };
         return this;
     };
 
     let _manager = (function(){
         let contexts = {};
-        let id = 0;
+        let contextsId = 0;
         
-        const addContext = (id, wasmPath) => {            
+        const addContext = (id, wasmPath, initCallback) => {            
             let canvas = global.document.getElementById(id);
             let context2D = canvas.getContext("2d");
             context2D.canvas.width = canvas.clientWidth;
             context2D.canvas.height = canvas.clientHeight;
-            let contextObj = new global.rust.wasm.CanvasRenderingContext2D(context2D, wasmPath);
-            let newId = id;
+            let contextObj = new global.rust.wasm.CanvasRenderingContext2D(context2D, wasmPath, initCallback);
+            let newId = contextsId;
             contexts[newId] = contextObj;
-            id++;
+            contextsId++;
             return contextObj;
         };
 

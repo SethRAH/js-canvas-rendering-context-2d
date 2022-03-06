@@ -209,14 +209,28 @@ impl CanvasRenderingContext2D{
     }
 }
 
+#[derive(Copy, Clone)]
 pub enum LineCap {
     Butt,
     Round,
     Square
 }
 
+impl LineCap {
+    pub fn iterator() -> impl Iterator<Item = LineCap>{
+        [LineCap::Butt, LineCap::Round, LineCap::Square].iter().copied()
+    }
+}
+
+#[derive(Copy, Clone)]
 pub enum LineJoin {
     Bevel,
     Round,
     Miter
+}
+
+impl LineJoin {
+    pub fn iterator() -> impl Iterator<Item = LineJoin>{
+        [LineJoin::Bevel, LineJoin::Round, LineJoin::Miter].iter().copied()
+    }
 }
