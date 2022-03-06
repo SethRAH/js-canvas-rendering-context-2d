@@ -1,89 +1,91 @@
 <html>
     <body style="margin:0; overflow-y: hidden; overflow-x: hidden;">
         <canvas id="my_canvas" style="width: 100vw; height: 100vh;"></canvas>
+        <script src="rust.wasm.canvasrenderingcontext2d.js"></script>
         <script>
-            let canvas = document.getElementById("my_canvas");
-            let context2D = canvas.getContext("2d");
+            let manager = rust.wasm.canvasRenderingContext2DManager;
+            let context = manager.addContext("my_canvas",'target/wasm32-unknown-unknown/debug/examples/hello-world.wasm');
+            context.init();
 
-            context2D.canvas.width = canvas.clientWidth;
-            context2D.canvas.height = canvas.clientHeight;
+            // context2D.canvas.width = canvas.clientWidth;
+            // context2D.canvas.height = canvas.clientHeight;
 
 
-            let imports = {
-                env:{ 
-                    // property getters/setters
-                    js_get_line_cap: () => { 
-                        const capString = context2D.lineCap.toLower(); 
-                        switch(capString){
-                            case "butt": return 1;
-                            case "round": return 2;
-                            case "square": return 3;
-                        }
-                        return 1;
-                    },
-                    js_set_line_cap: (value) => {
-                        let capVal = "butt";
-                        switch(value){
-                            case 1: capVal = "butt"; break;
-                            case 2: capVal = "round"; break;
-                            case 3: capVal = "square"; break;
-                        }
-                        context2D.lineCap = capVal;
-                    },
-                    js_get_line_join: () => { 
-                        const joinString = context2D.lineJoin.toLower(); 
-                        switch(joinString){
-                            case "bevel": return 1;
-                            case "round": return 2;
-                            case "miter": return 3;
-                        }
-                        return 1; 
-                    },
-                    js_set_line_join: (value) => {
-                        let joinVal = "bevel";
-                        switch(value){
-                            case 1: joinVal = "bevel"; break;
-                            case 2: joinVal = "round"; break;
-                            case 3: joinVal = "miter"; break;
-                        }
-                        context2D.lineJoin = joinVal;
-                    },
-                    js_get_line_width: () => { return context2D.lineWidth; },
-                    js_set_line_width: (value) => {context2D.lineWidth = value; },
-                    js_set_stroke_style_rgba: (r, g, b, a) => {
-                        const red = r.toString(16).padStart(2, '0');
-                        const green = g.toString(16).padStart(2, '0');
-                        const blue = b.toString(16).padStart(2, '0');
-                        const alpha = a.toString(16).padStart(2, '0');
-                        context2D.strokeStyle = "#"+red+green+blue+alpha;
-                    },
+            // let imports = {
+            //     env:{ 
+            //         // property getters/setters
+            //         js_get_line_cap: () => { 
+            //             const capString = context2D.lineCap.toLower(); 
+            //             switch(capString){
+            //                 case "butt": return 1;
+            //                 case "round": return 2;
+            //                 case "square": return 3;
+            //             }
+            //             return 1;
+            //         },
+            //         js_set_line_cap: (value) => {
+            //             let capVal = "butt";
+            //             switch(value){
+            //                 case 1: capVal = "butt"; break;
+            //                 case 2: capVal = "round"; break;
+            //                 case 3: capVal = "square"; break;
+            //             }
+            //             context2D.lineCap = capVal;
+            //         },
+            //         js_get_line_join: () => { 
+            //             const joinString = context2D.lineJoin.toLower(); 
+            //             switch(joinString){
+            //                 case "bevel": return 1;
+            //                 case "round": return 2;
+            //                 case "miter": return 3;
+            //             }
+            //             return 1; 
+            //         },
+            //         js_set_line_join: (value) => {
+            //             let joinVal = "bevel";
+            //             switch(value){
+            //                 case 1: joinVal = "bevel"; break;
+            //                 case 2: joinVal = "round"; break;
+            //                 case 3: joinVal = "miter"; break;
+            //             }
+            //             context2D.lineJoin = joinVal;
+            //         },
+            //         js_get_line_width: () => { return context2D.lineWidth; },
+            //         js_set_line_width: (value) => {context2D.lineWidth = value; },
+            //         js_set_stroke_style_rgba: (r, g, b, a) => {
+            //             const red = r.toString(16).padStart(2, '0');
+            //             const green = g.toString(16).padStart(2, '0');
+            //             const blue = b.toString(16).padStart(2, '0');
+            //             const alpha = a.toString(16).padStart(2, '0');
+            //             context2D.strokeStyle = "#"+red+green+blue+alpha;
+            //         },
                     
-                    // functions
-                    js_arc: (x, y, radius, start_angle, end_angle, counter_clockwise) =>{
-                        context2D.arc(x,y,radius,start_angle,end_angle,counter_clockwise);
-                    },
-                    js_arc_to: (x1, y1, x2, y2, radius) =>{
-                        context2D.arcTo(x1,y1,x2,y2,radius);
-                    },
-                    js_begin_path: () =>{
-                        context2D.beginPath();
-                    },
-                    js_line_to: (x, y) =>{
-                        context2D.lineTo(x,y);
-                    },
-                    js_move_to: (x, y) =>{
-                        context2D.moveTo(x,y);
-                    },
-                    js_stroke: () => {
-                        context2D.stroke();
-                    }
-                }
-            };
+            //         // functions
+            //         js_arc: (x, y, radius, start_angle, end_angle, counter_clockwise) =>{
+            //             context2D.arc(x,y,radius,start_angle,end_angle,counter_clockwise);
+            //         },
+            //         js_arc_to: (x1, y1, x2, y2, radius) =>{
+            //             context2D.arcTo(x1,y1,x2,y2,radius);
+            //         },
+            //         js_begin_path: () =>{
+            //             context2D.beginPath();
+            //         },
+            //         js_line_to: (x, y) =>{
+            //             context2D.lineTo(x,y);
+            //         },
+            //         js_move_to: (x, y) =>{
+            //             context2D.moveTo(x,y);
+            //         },
+            //         js_stroke: () => {
+            //             context2D.stroke();
+            //         }
+            //     }
+            // };
 
-            WebAssembly.instantiateStreaming(fetch('target/wasm32-unknown-unknown/debug/examples/hello-world.wasm'), imports)
-                .then( result => {
-                    result.instance.exports.main();
-                });
+            // WebAssembly.instantiateStreaming(fetch('target/wasm32-unknown-unknown/debug/examples/hello-world.wasm'), imports)
+            //     .then( result => {
+            //         result.instance.exports.main();
+            //     });
         </script>
     </body>
 </html>
