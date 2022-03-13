@@ -1,18 +1,41 @@
 <html>
+    <head>
+        <style>
+            .example-container{
+                border-style:solid;
+                border-width: thin;
+                border-radius: 2%;
+                margin: 1ex;
+                padding: 1ex;
+            }
+        </style>
+    </head>
     <body style="margin:0; overflow-y: hidden; overflow-x: hidden;">
         <h1>Examples</h1>
-        <div id="examples" style="display:flex;">
-            <div id="exampleBigM">
+        <div id="examples" style="display:flex;flex-wrap: wrap; margin-left: 3ex; margin-right: 3ex;">
+            <div id="exampleBigM" class="example-container">
                 <h3>Big M</h3>
                 <canvas id="canvasBigM" class="example-canvas" data-wasm-path="target/wasm32-unknown-unknown/debug/examples/big-m.wasm"></canvas>
             </div>
-            <div id="exampleMultiColorCircles">
+            <div id="exampleMultiColorCircles" class="example-container">
                 <h3>Multi-Color Circles</h3>
                 <canvas id="canvasMultiColorCircles" class="example-canvas" data-wasm-path="target/wasm32-unknown-unknown/debug/examples/multi-color-circles.wasm"></canvas>
             </div>
-            <div id="exampleLineCaps">
+            <div id="exampleLineCaps" class="example-container">
                 <h3>Line Caps</h3>
                 <canvas id="canvasLineCaps" class="example-canvas" data-wasm-path="target/wasm32-unknown-unknown/debug/examples/line-caps.wasm"></canvas>
+            </div>
+            <div id="exampleLineJoins" class="example-container">
+                <h3>Line Joins</h3>
+                <canvas id="canvasLineJoins" class="example-canvas" data-wasm-path="target/wasm32-unknown-unknown/debug/examples/line-joins.wasm"></canvas>
+            </div>
+            <div id="exampleFillStyle" class="example-container">
+                <h3>Fill Style</h3>
+                <canvas id="canvasFillStyle" class="example-canvas" data-wasm-path="target/wasm32-unknown-unknown/debug/examples/fill-style.wasm"></canvas>
+            </div>
+            <div id="exampleClearRect" class="example-container">
+                <h3>Clear Rect</h3>
+                <canvas id="canvasClearRect" class="example-canvas" data-wasm-path="target/wasm32-unknown-unknown/debug/examples/clear-rect.wasm"></canvas>
             </div>
         </div>
         <script src="rust.wasm.canvasrenderingcontext2d.js"></script>

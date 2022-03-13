@@ -10,7 +10,14 @@
             let myContext = this.context2D;
             let imports = {
                 env:{ 
-                    // property getters/setters
+                    // property getters/setters                    
+                    js_set_fill_style_rgba: (r, g, b, a) => {
+                        const red = r.toString(16).padStart(2, '0');
+                        const green = g.toString(16).padStart(2, '0');
+                        const blue = b.toString(16).padStart(2, '0');
+                        const alpha = a.toString(16).padStart(2, '0');
+                        myContext.fillStyle = "#"+red+green+blue+alpha;
+                    },
                     js_get_line_cap: () => { 
                         const capString = myContext.lineCap.toLower(); 
                         switch(capString){
@@ -64,8 +71,20 @@
                     js_arc_to: (x1, y1, x2, y2, radius) =>{
                         myContext.arcTo(x1,y1,x2,y2,radius);
                     },
-                    js_begin_path: () =>{
+                    js_begin_path: () => {
                         myContext.beginPath();
+                    },
+                    js_clear_rect: (x,y,width,height) => {
+                        myContext.clearRect(x,y,width, height);
+                    },
+                    js_close_path: () => {
+                        myContext.closePath();
+                    },
+                    js_fill: () => {
+                        myContext.fill();
+                    },
+                    js_fill_rect: (x,y,width,height) => {
+                        myContext.fillRect(x,y,width, height);
                     },
                     js_line_to: (x, y) =>{
                         myContext.lineTo(x,y);
