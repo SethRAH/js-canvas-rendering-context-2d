@@ -1,6 +1,12 @@
 use js_canvas_rendering_context_2d::*;
 
 fn main() {
+    draw();
+}
+
+
+#[no_mangle]
+pub extern "C" fn draw(){
     
     // Draw Lines
     CanvasRenderingContext2D::set_stroke_style_rgba(0, 0, 0, 255);
@@ -17,5 +23,4 @@ fn main() {
         CanvasRenderingContext2D::stroke();
         i += 1;
     }
-
 }

@@ -2,15 +2,24 @@
     global.rust = global.rust || {};
     global.rust.wasm = global.rust.wasm || {};
 
-    function CanvasRenderingContext2D (context2D, wasmPath, initCallback) {
+    function CanvasRenderingContext2D (context2D, wasmPath, eventHandlers) {
         this.context2D = context2D;
         this.wasmPath = wasmPath;
-        this.initCallback = initCallback || ((result) => {});
+        let handlers = eventHandlers || {};
+
+        this.eventHandlers = { 
+            onInit: handlers.onInit || ((result) => {}),
+            onResize: handlers.onResize ||  ((result) => {}),
+            onAnimate: handlers.onAnimate ||  ((result) => {})
+        };
         this.init = function() {        
             let myContext = this.context2D;
+            let myHandlers = this.eventHandlers;
             let imports = {
                 env:{ 
-                    // property getters/setters                    
+                    // property getters/setters         
+                    js_get_canvas_height: () => myContext.canvas.height,
+                    js_get_canvas_width: () => myContext.canvas.width,           
                     js_set_fill_style_rgba: (r, g, b, a) => {
                         const red = r.toString(16).padStart(2, '0');
                         const green = g.toString(16).padStart(2, '0');
@@ -96,10 +105,32 @@
                         myContext.stroke();
                     }
                 }
-            };      
+            };
+
+            
     
             WebAssembly.instantiateStreaming(fetch(this.wasmPath), imports)
-            .then(this.initCallback);  
+            .then((result) => {
+                //call init handler
+                myHandlers.onInit(result); 
+
+                //add Resize Event Handler
+                if(global.addEventListener){
+                    global.addEventListener('resize', () => {
+                        setDimensions(myContext, myContext.canvas);
+                        myHandlers.onResize(result);  
+                    }, true);
+                }
+
+                //add animation handler -- this may slow stuff down because its looping animation and doing a no-op... is that alright?
+                if(global.requestAnimationFrame){
+                    function animate(){
+                        myHandlers.onAnimate(result);
+                        global.requestAnimationFrame(animate);
+                    }
+                    global.requestAnimationFrame(animate);
+                }
+            });  
         };
         return this;
     };
@@ -111,12 +142,12 @@
         const addContext = (id, wasmPath, initCallback) => {            
             let canvas = global.document.getElementById(id);
             let context2D = canvas.getContext("2d");
-            context2D.canvas.width = canvas.clientWidth;
-            context2D.canvas.height = canvas.clientHeight;
+            setDimensions(context2D, canvas);
             let contextObj = new global.rust.wasm.CanvasRenderingContext2D(context2D, wasmPath, initCallback);
             let newId = contextsId;
             contexts[newId] = contextObj;
-            contextsId++;
+            contextsId++;           
+
             return contextObj;
         };
 
@@ -125,6 +156,12 @@
         }
     }());
 
+    
+
+    const setDimensions = (context, canvas) => {            
+        context.canvas.width = canvas.clientWidth;
+        context.canvas.height = canvas.clientHeight;
+    };
 
     global.rust.wasm.canvasRenderingContext2DManager = _manager;
     global.rust.wasm.CanvasRenderingContext2D = CanvasRenderingContext2D;

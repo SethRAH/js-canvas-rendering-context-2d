@@ -1,5 +1,7 @@
 extern "C" {
     // property getters/setters
+    fn js_get_canvas_height()->f32;
+    fn js_get_canvas_width()->f32;
     fn js_set_fill_style_rgba(r: u8, g: u8, b: u8, a: u8);
     fn js_get_line_cap() -> u32;
     fn js_set_line_cap(value: u32);
@@ -32,6 +34,18 @@ extern "C" {
 pub struct CanvasRenderingContext2D {}
 
 impl CanvasRenderingContext2D {
+
+    
+    pub fn get_canvas_height()->f32{
+        unsafe {
+            return js_get_canvas_height();
+        }
+    }
+    pub fn get_canvas_width()->f32{
+        unsafe {
+            return js_get_canvas_width();
+        }
+    }
 
     /// setter for property that specifies the color to use for the fills (outlines) around shapes. The default is black.
     /// see [CanvasRenderingContext2D.fillStyle](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle)

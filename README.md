@@ -11,13 +11,32 @@ Also included in this repo is the file `rust.wasm.canvasrenderingcontext2d.js`. 
 let manager = rust.wasm.canvasRenderingContext2DManager;
 
 // callback that is called once the canvas element is bound to the wasm program
-let callback = function(result) {
-    // you probably want to call the rust program's main function here but you might also want to set up a hook to JS animate
+let initCallback = function(result) {
+    // you probably want to call the rust program's main function here 
     result.instance.exports.main();
 };
 
+// callback that is called on window resize
+let resizeCallback = function(result) {
+    // you may want to redraw when the window is resized
+    result.instance.export.draw();
+}
+
+// callback that is called on the browsers' request animation frame
+let animateCallback = function(result) {
+    // you may want to tick the program and re-draw here
+    result.instance.export.tick();
+    result.instance.export.draw();
+}
+
+let callbacks = {
+    onInit: initCallback,
+    onResize: resizeCallback,
+    onAnimate: animateCallback
+};
+
 // create a context from the manager
-let localContext = manager.addContext(canvasId, wasmPath, callback);
+let localContext = manager.addContext(canvasId, wasmPath, callbacks);
 
 // initing the context will bind the canvas element to the wasm program and then call the callback
 localContext.init();

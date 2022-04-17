@@ -4,9 +4,15 @@
             .example-container{
                 border-style:solid;
                 border-width: thin;
+                border-color:#AAA;
                 border-radius: 2%;
                 margin: 1ex;
                 padding: 1ex;
+            }
+            .example-container > canvas {
+                border-style: solid;
+                border-width: thin;
+                border-color: #AAA;
             }
         </style>
     </head>
@@ -37,18 +43,37 @@
                 <h3>Clear Rect</h3>
                 <canvas id="canvasClearRect" class="example-canvas" data-wasm-path="target/wasm32-unknown-unknown/debug/examples/clear-rect.wasm"></canvas>
             </div>
+            <div id="exampleClearRect" class="example-container">
+                <h3>Game of Life</h3>
+                <canvas id="canvasGameOfLife" class="example-canvas implements-tick" data-wasm-path="target/wasm32-unknown-unknown/debug/examples/game-of-life.wasm"></canvas>
+            </div>
         </div>
         <script src="rust.wasm.canvasrenderingcontext2d.js"></script>
         <script>
             let manager = rust.wasm.canvasRenderingContext2DManager;
 
             let examples = document.getElementsByClassName('example-canvas');
+            let lastTick = Date.now();
             for(let i = 0; i < examples.length; i++){
                 let local = examples[i];
                 let wasmPath = local.getAttributeNode('data-wasm-path').value;
-                let localContext = manager.addContext(local.id,wasmPath, result => {
-                    result.instance.exports.main();
-                });
+                let handlers = {
+                    onInit: (result) => result.instance.exports.main(),
+                    onResize: (result) => result.instance.exports.draw()
+                };
+
+                if(local.classList.contains('implements-tick')){
+                    handlers.onAnimate = (result) => {
+                        let current = Date.now();
+                        if((current - lastTick) > 100){
+                            result.instance.exports.tick();
+                            lastTick = current;
+                        }
+                        result.instance.exports.draw();
+                    };
+                }
+
+                let localContext = manager.addContext(local.id,wasmPath,handlers);
 
                 localContext.init();
             }
