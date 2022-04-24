@@ -9,8 +9,14 @@ extern "C" {
     fn js_set_line_join(value: u32);
     fn js_get_line_width() -> u32;
     fn js_set_line_width(value: u32);
+    fn js_get_shadow_blur() ->u32;
+    fn js_set_shadow_blur(value: u32);
+    fn js_set_shadow_color_rgba(r: u8, g: u8, b: u8, a: u8);
     fn js_set_stroke_style_rgba(r: u8, g: u8, b: u8, a: u8);
-
+    fn js_get_shadow_offset_x() ->i32;
+    fn js_set_shadow_offset_x(value: i32);
+    fn js_get_shadow_offset_y() ->i32;
+    fn js_set_shadow_offset_y(value: i32);
     // functions
     fn js_arc(
         x: f32,
@@ -29,6 +35,7 @@ extern "C" {
     fn js_line_to(x: f32, y: f32);
     fn js_move_to(x: f32, y: f32);
     fn js_stroke();
+    fn js_stroke_rect(x: f32, y: f32, width: f32, height: f32);
 }
 
 pub struct CanvasRenderingContext2D {}
@@ -145,6 +152,84 @@ impl CanvasRenderingContext2D {
         }
         unsafe {
             js_set_line_width(value);
+        }
+    }
+
+    /// getter for property that specifies the amount of blur applied to shadows. The default is 0 (no blur). 
+    /// see [CanvasRenderingContext2D.shadowBlur](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/shadowBlur)
+    pub fn get_shadow_blur() -> u32 {
+        unsafe {
+            return js_get_shadow_blur();
+        }
+    }
+
+    
+    /// setter for property that specifies the amount of blur applied to shadows. The default is 0 (no blur). 
+    /// see [CanvasRenderingContext2D.shadowBlur](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/shadowBlur)
+    ///
+    /// # Parameters
+    ///
+    /// * 'value' - the the level of shadow blur. A zero value indicates no blur.
+    pub fn set_shadow_blur(value: u32) {
+        unsafe {
+            js_set_shadow_blur(value);
+        }
+    }
+
+    /// setter for property that specifies the color of shadows. The default is fully transparent black.
+    /// see [CanvasRenderingContext2D.shadowColor](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/shadowColor)
+    ///
+    /// # Parameters
+    ///
+    /// * 'r' - value from 0 to 255 that represents how much red is in the color
+    /// * 'g' - value from 0 to 255 that represents how much green is in the color
+    /// * 'b' - value from 0 to 255 that represents how much blue is in the color
+    /// * 'a' - value from 0 to 255 that represents how opaque the color is
+    pub fn set_shadow_color_rgba(r: u8, g: u8, b: u8, a: u8) {
+        unsafe {
+            js_set_shadow_color_rgba(r, g, b, a);
+        }
+    }
+
+    /// getter for property that specifies the distance that shadows will be offset horizontally. The default is 0 (no horizontal offset). 
+    /// see [CanvasRenderingContext2D.shadowOffsetX](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/shadowOffsetX)
+    pub fn get_shadow_offset_x() -> i32 {
+        unsafe {
+            return js_get_shadow_offset_x();
+        }
+    }
+
+    
+    /// setter for property that specifies the distance that shadows will be offset horizontally. The default is 0 (no horizontal offset). 
+    /// see [CanvasRenderingContext2D.shadowOffsetX](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/shadowOffsetX)
+    ///
+    /// # Parameters
+    ///
+    /// * 'value' - the the distance of horizontal offset. Positive values are to the right, and negative to the left.
+    pub fn set_shadow_offset_x(value: i32) {
+        unsafe {
+            js_set_shadow_offset_x(value);
+        }
+    }
+
+    /// getter for property that specifies the distance that shadows will be offset vertically. The default is 0 (no vertical offset). 
+    /// see [CanvasRenderingContext2D.shadowOffsetY](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/shadowOffsetY)
+    pub fn get_shadow_offset_y() -> i32 {
+        unsafe {
+            return js_get_shadow_offset_y();
+        }
+    }
+
+    
+    /// setter for property that specifies the distance that shadows will be offset vertically. The default is 0 (no vertical offset). 
+    /// see [CanvasRenderingContext2D.shadowOffsetY](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/shadowOffsetY)
+    ///
+    /// # Parameters
+    ///
+    /// * 'value' - the the distance of vertical offset. Positive values are down, and negative are up.
+    pub fn set_shadow_offset_y(value: i32) {
+        unsafe {
+            js_set_shadow_offset_y(value);
         }
     }
 
@@ -299,6 +384,19 @@ impl CanvasRenderingContext2D {
     /// # Parameters (none)
     pub fn stroke() {
         unsafe { js_stroke() }
+    }
+
+    /// draws a rectangle that is stroked (outlined) according to the current strokeStyle and other context settings.
+    /// see [CanvasRenderingContext2D.strokeRect](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeRect) 
+    ///
+    /// # Parameters
+    ///
+    /// * 'x' - the x-axis coordinate of the rectangle's starting point.
+    /// * 'y' - the y-axis coordinate of the rectangle's starting point.
+    /// * 'width' - the rectangle's width. Positive values are to the right, and negative to the left.
+    /// * 'height' - the rectangle's height. Positive values are down, and negative are up.
+    pub fn stroke_rect(x: f32, y: f32, width: f32, height: f32) {
+        unsafe { js_stroke_rect(x, y, width, height) }
     }
 }
 

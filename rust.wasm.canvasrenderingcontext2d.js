@@ -65,6 +65,19 @@
                     },
                     js_get_line_width: () => { return myContext.lineWidth; },
                     js_set_line_width: (value) => {myContext.lineWidth = value; },
+                    js_get_shadow_blur: () => { return myContext.shadowBlur;},
+                    js_set_shadow_blur: (value) => { myContext.shadowBlur = value},
+                    js_set_shadow_color_rgba: (r, g, b, a) => {
+                        const red = r.toString(16).padStart(2, '0');
+                        const green = g.toString(16).padStart(2, '0');
+                        const blue = b.toString(16).padStart(2, '0');
+                        const alpha = a.toString(16).padStart(2, '0');
+                        myContext.shadowColor = "#"+red+green+blue+alpha;
+                    },
+                    js_get_shadow_offset_x: () => { return myContext.shadowOffsetX; },
+                    js_set_shadow_offset_x: (value) => { myContext.shadowOffsetX = value; },
+                    js_get_shadow_offset_y: () => { return myContext.shadowOffsetY; },
+                    js_set_shadow_offset_y: (value) => { myContext.shadowOffsetY = value; },
                     js_set_stroke_style_rgba: (r, g, b, a) => {
                         const red = r.toString(16).padStart(2, '0');
                         const green = g.toString(16).padStart(2, '0');
@@ -103,6 +116,9 @@
                     },
                     js_stroke: () => {
                         myContext.stroke();
+                    },
+                    js_stroke_rect: (x,y,width,height) => {
+                        myContext.strokeRect(x,y,width, height);
                     }
                 }
             };
